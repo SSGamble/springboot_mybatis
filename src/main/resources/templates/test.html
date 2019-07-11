@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+
+    <script src="js/jquery/2.0.0/jquery.min.js"></script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+</head>
+
+<body>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+<script>
+    $(function () {
+        var data4Vue = {
+            uri: 'moves',
+            moveData: [],
+        };
+
+        var vue = new Vue({
+            el: '.container',
+            data: data4Vue,
+            created: function () {
+                this.notes();
+            },
+            methods: {
+                notes: function () {
+                    var url = this.uri;
+                    axios.get(url).then(function (response) {
+                        vue.moveData = response.data;
+                    });
+                },
+                chart: function () {
+                    location.href = "chart";
+                }
+            }
+        });
+    });
+</script>
+
+<div class="container">
+    <button style="width: 200px" @click="chart">词图</button>
+
+    <table align='center' border='1' cellspacing='0'>
+        <tr>
+            <th>姓名</th>
+            <th>评论</th>
+        </tr>
+        <tr v-for="move in moveData" :key="move.id">
+            <th>{{move.name}}</th>
+            <th>{{move.content}}</th>
+        </tr>
+    </table>
+</div>
+
+</body>
+
+</html>
